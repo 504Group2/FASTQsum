@@ -16,7 +16,7 @@ bc01=[]
 with gzip.open('fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
     for idx, seq_record in enumerate(SeqIO.parse(f, "fastq")): # Read and parse 
         bc01.append(seq_record)
-        if idx == 6: # set how many reads we want
+        if idx == 100: # set how many reads we want
             break
 
 #2.seq_record object to lists             
@@ -26,7 +26,7 @@ idcodel=[]
 for i in bc01:
     idcodel.append(i.id)
 
-# List for column Sequence_length_template, l = list
+# List for column Sequence_length_template
 seql = []
 for i in bc01:
     seql.append(len(i.seq))
@@ -55,7 +55,7 @@ readid = pd.Series(idcodel, name='Read_ID')
 start_times = pd.Series(start_timel, name='Start_time')
 seqs = pd.Series(seql, name='Seq_length_template')
 quality = pd.Series(qual, name='Mean_qscore_template')
-barcodes = pd.Series(barcodel, name='Barcode')
+barcodes = pd.Series(barcodel, name='Barcode_arrangement')
 
 #4.series to dataframe 
 fastqdf=pd.DataFrame(dict(Read_ID=readid,Start_time=start_times,Sequence_length_template=seqs,Mean_qscore_template=quality,Barcode_arrangement=barcodes)).set_index(['Read_ID'])
