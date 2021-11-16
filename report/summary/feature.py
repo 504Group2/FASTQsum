@@ -1,5 +1,5 @@
 from readFastq import FQtoCsv
-#15nov
+#16nov
 
 def fastq2html() :
     FQtoCsv()  
@@ -7,7 +7,8 @@ def fastq2html() :
     #f2
     #qscore vs readlength
     #interactive plot that display percentage data within the box
-    
+
+    #read.csv
 
 
 
