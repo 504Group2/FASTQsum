@@ -12,7 +12,7 @@ from Bio import SeqIO
 
 #1.Read fastq 
 # Extract,Read,Parse ont.exp2.fastq.gz into list bc01
-def getfastq() :
+def getFq() :
     
     bc01=[]
     with gzip.open('fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
@@ -24,7 +24,7 @@ def getfastq() :
 #2.seq_record object to lists             
 # Breakdown list bc01 into lists of each column
 # List for column Read_id   
-def colList(bc01): 
+def colToList(bc01): 
     idcodel=[]
     for i in bc01:
         idcodel.append(i.id)
@@ -55,7 +55,7 @@ def colList(bc01):
     return mycolList
 
 
-def colDf(mycolList): 
+def colToDf(mycolList): 
 #3.lists to series 
 #Convert lists to pandas Series     
     readid = pd.Series(mycolList[0], name='Read_ID')
@@ -70,22 +70,22 @@ def colDf(mycolList):
     return fastqdf
 
 #5.convert dataframe to csv file
-def dfCsv(fastqdf):
+def dfToCsv(fastqdf):
     fastqdf.to_csv('test-1.csv', index=None)
     pd.read_csv('test-1.csv')
     success="Create .csv successfully"
     return success
 
-def FQtoCsv():
-    bc01=getfastq()
-    newcolList=colList(bc01)
-    mydf=colDf(newcolList)
-    print(dfCsv(mydf))
+def FqToCsv():
+    bc01=getFq()
+    newcolList=colToList(bc01)
+    mydf=colToDf(newcolList)
+    print(dfToCsv(mydf))
 
-def FQtoDf():
-    bc01=getfastq()
-    newcolList=colList(bc01)
-    mydf=colDf(newcolList)
+def FqToDf():
+    bc01=getFq()
+    newcolList=colToList(bc01)
+    mydf=colToDf(newcolList)
     return mydf
 
 
