@@ -55,7 +55,7 @@ def colToList(bc01):
     return mycolList
 
 
-def colToDf(mycolList): 
+def listToDf(mycolList): 
 #3.lists to series 
 #Convert lists to pandas Series     
     readid = pd.Series(mycolList[0], name='Read_ID')
@@ -76,16 +76,17 @@ def dfToCsv(fastqdf):
     success="Create .csv successfully"
     return success
 
-def FqToCsv():
+def fqToCsv():
     bc01=getFq()
     newcolList=colToList(bc01)
-    mydf=colToDf(newcolList)
+    mydf=listToDf(newcolList)
     print(dfToCsv(mydf))
 
-def FqToDf():
+# Fastq to df for feature.py
+def fqToDf():
     bc01=getFq()
     newcolList=colToList(bc01)
-    mydf=colToDf(newcolList)
+    mydf=listToDf(newcolList)
     return mydf
 
 
