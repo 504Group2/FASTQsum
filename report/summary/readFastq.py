@@ -53,9 +53,11 @@ def colList(bc01):
         qual.append(np.mean(i.letter_annotations['phred_quality']))
     mycolList=[idcodel,start_timel,seql,qual,barcodel]
     return mycolList
-#3.lists to series 
-# Convert lists to pandas Series 
+
+
 def colDf(mycolList): 
+#3.lists to series 
+#Convert lists to pandas Series     
     readid = pd.Series(mycolList[0], name='Read_ID')
     start_times = pd.Series(mycolList[1], name='Start_time')
     seqs = pd.Series(mycolList[2], name='Seq_length_template')
@@ -80,5 +82,10 @@ def FQtoCsv():
     mydf=colDf(newcolList)
     print(dfCsv(mydf))
 
+def FQtoDf():
+    bc01=getfastq()
+    newcolList=colList(bc01)
+    mydf=colDf(newcolList)
+    return mydf
 
 
