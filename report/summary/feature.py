@@ -1,5 +1,7 @@
-from readFastq import fqToCsv
+from report.read.readFastq import fqToCsv
+
 #16nov
+"""
 def lenSum(csv):
     print("This is read length summary")
 def scSum(csv):
@@ -15,9 +17,9 @@ def csvToHtml(csv):
 def fqToHtml() :
     csv=fqToCsv()  
     csvToHtml(csv)
- 
+""" 
 print("I will turn your fastq into report")
-fqToHtml()
+#fqToHtml()
 
         
 
