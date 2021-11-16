@@ -82,11 +82,6 @@ def fqToCsv():
     mydf=listToDf(newcolList)
     print(dfToCsv(mydf))
 
-# Fastq to df for feature.py
-def fqToDf():
-    bc01=getFq()
-    newcolList=colToList(bc01)
-    mydf=listToDf(newcolList)
-    return mydf
+
 
 
