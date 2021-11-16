@@ -1,19 +1,23 @@
-from readFastq import FQtoCsv
+from readFastq import fqToCsv
 #16nov
+def lenSum(csv):
+    print("This is read length summary")
+def scSum(csv):
+    print("This is score summary")
+def scVsLen(csv):
+    print("This is score vs summary summary")
 
-def fastq2html() :
-    FQtoCsv()  
-    #f1
-    #f2
-    #qscore vs readlength
-    #interactive plot that display percentage data within the box
+def csvToHtml(csv):
+    lenSum(csv)
+    scSum(csv)
+    scVsLen(csv)
 
-    #read.csv
-
-
-
-    print("I will turn your fastq into report")
-    
+def fqToHtml() :
+    csv=fqToCsv()  
+    csvToHtml(csv)
+ 
+print("I will turn your fastq into report")
+fqToHtml()
 
         
 
