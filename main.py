@@ -1,5 +1,5 @@
 from report.summary.feature import fqToHtml
-from report.summary.readFastq import fqToCsv
+from report.read.readFastq import fqToCsv
 def argparserLocal():
     from argparse import ArgumentParser
     parser=ArgumentParser(prog='fastqsum',description='Summarize fastq to html report')
@@ -19,10 +19,12 @@ def main():
     parser = argparserLocal()
     args=parser.parse_args()
     if args.command == 'sum':
-        if args.csv :
-            fqToCsv()
-        else :
+        if args.save2csv==None :
             fqToHtml()
+        else :
+            fqToCsv()
+            
+            
 
 if __name__ == "__main__":
     main()
