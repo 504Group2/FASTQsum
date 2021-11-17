@@ -15,7 +15,7 @@ from Bio import SeqIO
 def getFq() :
     
     bc01=[]
-    with gzip.open('/Users/naphat/Desktop/504/fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
+    with gzip.open('../fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
         for idx, seq_record in enumerate(SeqIO.parse(f, "fastq")): # Read and parse 
             bc01.append(seq_record)
             if idx == 100: # set how many reads we want
@@ -71,9 +71,10 @@ def listToDf(mycolList):
 
 #5.convert dataframe to csv file
 def dfToCsv(fastqdf):
-    csvLocation='/Users/naphat/Desktop/504/test-1.csv'
-    fastqdf.to_csv('/Users/naphat/Desktop/504/test-1.csv', index=None)
-    pd.read_csv('/Users/naphat/Desktop/504/test-1.csv')
+    csvLocation='../test-1.csv'
+    fastqdf.to_csv(csvLocation, index=None)
+    #fastqdf.to_csv('/Users/naphat/Desktop/504/test-1.csv', index=None)
+    pd.read_csv(csvLocation)
     #success="Create .csv successfully"
     return csvLocation
 
