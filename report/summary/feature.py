@@ -11,13 +11,28 @@ def scVsLen(csv):
     #Bam
     print("This is score vs summary summary")
     c=pd.read_csv(csv)
-    #print(c['Read_ID'])
-    #print (pd.DataFrame.head(c))
-    #print(c.loc[:,'Sequence_length_template'])
+   
     fig1 =px.density_heatmap(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
-    #fig2 =px.scatter(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
-    fig1.write_html("../file.html")
-    #fig2.write_html("../file.html")
+    fig2 =px.scatter(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
+    fig1.write_html("../density.html")
+    fig2.write_html("../scatter.html")
+    # write-html.py
+
+    f = open('../lenvsquality.html','w')
+
+    message = """
+    <html>
+        <head> FASTQsum : Read Length vs. Quality</head>
+        <body>
+            <p>This is the third sections</p>
+        </body>
+    </html>"""
+
+    f.write(message)
+    f.close()
+    # Report summary should say 
+    # the read len and quality of box with most count
+    # percentile in the selected range
 
 def csvToHtml(csv):
 
