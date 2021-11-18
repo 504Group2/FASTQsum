@@ -12,19 +12,20 @@ from Bio import SeqIO
 
 #1.Read fastq 
 # Extract,Read,Parse ont.exp2.fastq.gz into list bc01
-def getFq() :
+def getFq(n) :
     
     bc01=[]
     with gzip.open('../fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
         for idx, seq_record in enumerate(SeqIO.parse(f, "fastq")): # Read and parse 
             bc01.append(seq_record)
-            if idx == 100: # set how many reads we want
+            if idx == n: # set how many reads we want
                 break
     return bc01
 #2.seq_record object to lists             
 # Breakdown list bc01 into lists of each column
 # List for column Read_id   
-def colToList(bc01): 
+def colToList(bc01,n): 
+    index=range(n+1)
     idcodel=[]
     for i in bc01:
         idcodel.append(i.id)
@@ -52,7 +53,7 @@ def colToList(bc01):
     for i in bc01:
         qual.append(np.mean(i.letter_annotations['phred_quality']))
     
-    index=range(101)
+    
     
     mycolList=[index,idcodel,start_timel,seql,qual,barcodel]
     return mycolList
@@ -84,8 +85,8 @@ def dfToCsv(fastqdf):
     return csvLocation
 
 def fqToCsv():
-    bc01=getFq()
-    newcolList=colToList(bc01)
+    bc01=getFq(100)
+    newcolList=colToList(bc01,100)
     mydf=listToDf(newcolList)
     print(dfToCsv(mydf))
     return dfToCsv(mydf)
