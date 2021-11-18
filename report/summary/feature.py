@@ -17,22 +17,23 @@ def scVsLen(csv):
     fig1.write_html("../density.html")
     fig2.write_html("../scatter.html")
     # write-html.py
+    # how to combine fig?
+    #f = open('../lenvsquality.html','w')
 
-    f = open('../lenvsquality.html','w')
+    #message = """
+    #<html>
+    #    <head> FASTQsum : Read Length vs. Quality</head>
+    #    <body>
+    #        <p>This is the third sections</p>
+    #    </body>
+    #</html>"""
 
-    message = """
-    <html>
-        <head> FASTQsum : Read Length vs. Quality</head>
-        <body>
-            <p>This is the third sections</p>
-        </body>
-    </html>"""
-
-    f.write(message)
-    f.close()
+    #f.write(message)
+    #f.close()
+    
     # Report summary should say 
     # the read len and quality of box with most count
-    # percentile in the selected range
+    # percentage in the each box
 
 def csvToHtml(csv):
 
