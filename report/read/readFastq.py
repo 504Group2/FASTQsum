@@ -51,22 +51,27 @@ def colToList(bc01):
     qual = []
     for i in bc01:
         qual.append(np.mean(i.letter_annotations['phred_quality']))
-    mycolList=[idcodel,start_timel,seql,qual,barcodel]
+    
+    index=range(101)
+    
+    mycolList=[index,idcodel,start_timel,seql,qual,barcodel]
     return mycolList
 
 
 def listToDf(mycolList): 
 #3.lists to series 
-#Convert lists to pandas Series     
-    readid = pd.Series(mycolList[0], name='Read_ID')
-    start_times = pd.Series(mycolList[1], name='Start_time')
-    seqs = pd.Series(mycolList[2], name='Seq_length_template')
-    quality = pd.Series(mycolList[3], name='Mean_qscore_template')
-    barcodes = pd.Series(mycolList[4], name='Barcode_arrangement')
+#Convert lists to pandas Series  
+#   
+    indexse = pd.Series(mycolList[0], name='index')
+    readid = pd.Series(mycolList[1], name='Read_ID')
+    start_times = pd.Series(mycolList[2], name='Start_time')
+    seqs = pd.Series(mycolList[3], name='Seq_length_template')
+    quality = pd.Series(mycolList[4], name='Mean_qscore_template')
+    barcodes = pd.Series(mycolList[5], name='Barcode_arrangement')
 
 #4.series to dataframe 
 
-    fastqdf=pd.DataFrame(dict(Read_ID=readid,Start_time=start_times,Sequence_length_template=seqs,Mean_qscore_template=quality,Barcode_arrangement=barcodes)).set_index(['Read_ID'])
+    fastqdf=pd.DataFrame(dict(Index=indexse,Read_ID=readid,Start_time=start_times,Sequence_length_template=seqs,Mean_qscore_template=quality,Barcode_arrangement=barcodes)).set_index(['Index'])
     return fastqdf
 
 #5.convert dataframe to csv file
