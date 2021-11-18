@@ -13,9 +13,11 @@ def scVsLen(csv):
     c=pd.read_csv(csv)
     #print(c['Read_ID'])
     #print (pd.DataFrame.head(c))
-    print(c.loc[:,'Read_ID'])
-    #fig =px.scatter(x=range(10), y=range(10))
-    #fig.write_html("../file.html")
+    #print(c.loc[:,'Sequence_length_template'])
+    fig1 =px.density_heatmap(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
+    #fig2 =px.scatter(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
+    fig1.write_html("../file.html")
+    #fig2.write_html("../file.html")
 
 def csvToHtml(csv):
 

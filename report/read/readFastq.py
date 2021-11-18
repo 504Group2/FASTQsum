@@ -66,7 +66,7 @@ def listToDf(mycolList):
     indexse = pd.Series(mycolList[0], name='index')
     readid = pd.Series(mycolList[1], name='Read_ID')
     start_times = pd.Series(mycolList[2], name='Start_time')
-    seqs = pd.Series(mycolList[3], name='Seq_length_template')
+    seqs = pd.Series(mycolList[3], name='Sequence_length_template')
     quality = pd.Series(mycolList[4], name='Mean_qscore_template')
     barcodes = pd.Series(mycolList[5], name='Barcode_arrangement')
 
