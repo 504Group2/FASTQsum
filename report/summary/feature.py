@@ -7,11 +7,14 @@ import plotly.graph_objects as go
 
 def lenSum(csv):
     print("This is read length summary")
+    
 def scSum(csv):
     print("This is score summary")
     sum = pd.read_csv(csv)
+    
     #Summary table
-    qsummarytable = sum.groupby('Barcode_arrangement').describe()
+    grouptable = sum.groupby('Barcode_arrangement')
+    qsummarytable = grouptable['Mean_qscore_template'].describe()
     print(qsummarytable)
     
     #Basecalled reads PHRED quality
@@ -34,7 +37,8 @@ def scSum(csv):
     qPiefig = go.Figure(data=[go.Pie(labels=qlabels, values=qvalues, textinfo='label+percent',
                              insidetextorientation='radial', pull=[0, 0.2]
                             )])
-    qPiefig.update_layout(title="Number of reads per quality score", legend_title="Type of reads")    
+    qPiefig.update_layout(title="Number of reads per quality score", legend_title="Type of reads")
+    
 def scVsLen(csv):
     #Bam
     print("This is score vs summary summary")
