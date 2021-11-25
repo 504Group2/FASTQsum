@@ -53,10 +53,7 @@ def colToList(bc01,n):
     qual = []
     for i in bc01:
         qual.append(np.mean(i.letter_annotations['phred_quality']))
-    
-    
-    
-    mycolList=[index,idcodel,start_timel,seql,qual,barcodel]
+        mycolList=[index,idcodel,start_timel,seql,qual,barcodel]
     return mycolList
 
 

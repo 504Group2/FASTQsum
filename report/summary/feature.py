@@ -4,15 +4,95 @@ import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 #16nov
+import gzip
+from os import name
+from matplotlib import colors
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statistics
+import csv
+from scipy import stats
+from math import fabs, log
+from Bio import SeqIO
+
+def numberReads(csvOut):
+    numberreads = len(csvOut)
+    return numberreads
+
+## Calculate Total bases
+def totalBase(templatelength):
+    totalbase = sum(templatelength)
+    return totalbase
+
+## Calculate Mean read length
+def meanLength(templatelength):
+    meanlength = statistics.mean(templatelength)
+    return meanlength
+
+## Calculate Median read length
+def medianLength(templatelength):
+    medianlength = statistics.median(templatelength)    
+    return medianlength
+
+def longestread(templatelength):
+    lengthsort = templatelength
+    lengthsort.sort()
+    maxread = max(lengthsort)
+    return maxread
+## Calculate Read length (N50)
+
+
 
 def lenSum(csv): #birth
     print("This is read length summary")
-    
-<<<<<<< HEAD
-def scSum(csv): #pe
-    print("This is score summary")
+    csvOut = pd.read_csv(csv)
+    templatelength = []
+    templatelength = csvOut['Sequence_length_template']
+    templatelength = list(templatelength)
+    totalbase = sum(templatelength)
+    halflength = totalbase/2
+    lengthsort = templatelength
+    lengthsort.sort(reverse=True)
+    total = 0
+    for i in lengthsort:
+        total += i
+        if total >= halflength:
+            break
 
-=======
+    N50size = i
+    print("Number of reads    : ", numberReads(csvOut))
+    print("Totoal base        : ", totalBase(templatelength))
+    print("Mean read length   : ", meanLength(templatelength))
+    print("Median read length : ", medianLength(templatelength))
+    print("Read length (N50)  : ", N50size)
+    print("Longest pass read  : ", longestread(templatelength))
+    ## Write basecalled read length summary to CSV
+    
+    totalbase = sum(templatelength)
+    meanlength = statistics.mean(templatelength)
+    medianlength = statistics.median(templatelength)
+    halflength = totalbase/2
+    lengthsort = templatelength
+    lengthsort.sort(reverse=True)
+    total = 0
+    
+    for i in lengthsort:
+        total += i
+        if total >= halflength:
+            break
+    N50size = i
+    lengthsort = templatelength
+    lengthsort.sort()
+    maxread = max(lengthsort)
+
+    #header = ['Number of reads','Total bases','Mean read length','Median read length','Read length (N50)','Longest pass read']
+    #data = [numberReads(), totalbase, meanlength, medianlength, N50size, maxread]
+    #with open('readlength.csv','w') as lengthOut:
+    #    writer = csv.writer(lengthOut)
+    #    writer.writerow(header)
+    #    writer.writerow(data)
+"""""    
 def scSum(csv):
     print("This is score summary")
     sum = pd.read_csv(csv)
@@ -43,8 +123,7 @@ def scSum(csv):
                              insidetextorientation='radial', pull=[0, 0.2]
                             )])
     qPiefig.update_layout(title="Number of reads per quality score", legend_title="Type of reads")
-    
->>>>>>> 68ca73751fe7c07011efc2805cb4a4e4ab7d3d46
+"""    
 def scVsLen(csv):
     #Bam
     print("This is score vs summary summary")
@@ -78,7 +157,7 @@ def scVsLen(csv):
 def csvToHtml(csv):
 
     lenSum(csv) #birth
-    scSum(csv) #pe
+    #scSum(csv) #pe
     scVsLen(csv) #bam
 
 def fqToHtml(filePath) :
