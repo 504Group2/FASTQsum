@@ -3,12 +3,10 @@ import pandas as pd
 import plotly.express as px
 #16nov
 
-def lenSum(csv): #birth
+def lenSum(csv):
     print("This is read length summary")
-    
-def scSum(csv): #pe
+def scSum(csv):
     print("This is score summary")
-
 def scVsLen(csv):
     #Bam
     print("This is score vs summary summary")
@@ -19,7 +17,6 @@ def scVsLen(csv):
     fig2 =px.scatter(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
     fig1.write_html("../density.html")
     fig2.write_html("../scatter.html")
-    #annotated
     # write-html.py
     # how to combine fig?
     #f = open('../lenvsquality.html','w')
@@ -41,10 +38,10 @@ def scVsLen(csv):
 
 def csvToHtml(csv):
 
-    lenSum(csv) #birth
-    scSum(csv) #pe
-    scVsLen(csv) #bam
+    lenSum(csv)
+    scSum(csv)
+    scVsLen(csv)
 
-def fqToHtml(filePath) :
-    csv=fqToCsv(filePath)  #csvlocation
+def fqToHtml() :
+    csv=fqToCsv()  
     csvToHtml(csv)
