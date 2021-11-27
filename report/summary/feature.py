@@ -16,59 +16,13 @@ from scipy import stats
 from math import fabs, log
 from Bio import SeqIO
 
-def numberReads(csvOut):
-    numberreads = len(csvOut)
-    return numberreads
-
-## Calculate Total bases
-def totalBase(templatelength):
-    totalbase = sum(templatelength)
-    return totalbase
-
-## Calculate Mean read length
-def meanLength(templatelength):
-    meanlength = statistics.mean(templatelength)
-    return meanlength
-
-## Calculate Median read length
-def medianLength(templatelength):
-    medianlength = statistics.median(templatelength)    
-    return medianlength
-
-def longestread(templatelength):
-    lengthsort = templatelength
-    lengthsort.sort()
-    maxread = max(lengthsort)
-    return maxread
-## Calculate Read length (N50)
-
-
-
 def lenSum(csv): #birth
     print("This is read length summary")
     csvOut = pd.read_csv(csv)
     templatelength = []
     templatelength = csvOut['Sequence_length_template']
     templatelength = list(templatelength)
-    totalbase = sum(templatelength)
-    halflength = totalbase/2
-    lengthsort = templatelength
-    lengthsort.sort(reverse=True)
-    total = 0
-    for i in lengthsort:
-        total += i
-        if total >= halflength:
-            break
-
-    N50size = i
-    print("Number of reads    : ", numberReads(csvOut))
-    print("Totoal base        : ", totalBase(templatelength))
-    print("Mean read length   : ", meanLength(templatelength))
-    print("Median read length : ", medianLength(templatelength))
-    print("Read length (N50)  : ", N50size)
-    print("Longest pass read  : ", longestread(templatelength))
-    ## Write basecalled read length summary to CSV
-    
+    numberreads = len(csvOut)
     totalbase = sum(templatelength)
     meanlength = statistics.mean(templatelength)
     medianlength = statistics.median(templatelength)
@@ -76,7 +30,6 @@ def lenSum(csv): #birth
     lengthsort = templatelength
     lengthsort.sort(reverse=True)
     total = 0
-    
     for i in lengthsort:
         total += i
         if total >= halflength:
@@ -85,13 +38,53 @@ def lenSum(csv): #birth
     lengthsort = templatelength
     lengthsort.sort()
     maxread = max(lengthsort)
+    print("Number of reads    : ", numberreads)
+    print("Totoal base        : ", totalbase)
+    print("Mean read length   : ", meanlength)
+    print("Median read length : ", medianlength)
+    print("Read length (N50)  : ", N50size)
+    print("Longest pass read  : ", maxread)
+    ## --------------------------------------------------------------------------------------
 
-    #header = ['Number of reads','Total bases','Mean read length','Median read length','Read length (N50)','Longest pass read']
-    #data = [numberReads(), totalbase, meanlength, medianlength, N50size, maxread]
-    #with open('readlength.csv','w') as lengthOut:
-    #    writer = csv.writer(lengthOut)
-    #    writer.writerow(header)
-    #    writer.writerow(data)
+    figTable = go.Figure(data=[go.Table(header=dict(values=['Number of reads','Total bases','Mean read length','Median read length','Read length (N50)','Longest pass read']),
+                 cells=dict(values=[numberreads, totalbase, meanlength, medianlength, N50size, maxread]))
+                     ])
+    #figTable.show()
+    # figTable.write_html('figTable.html')
+    ## Graph: All barcodes
+    group_label = ['readlength']
+
+    lenfig = ff.create_distplot([csvOut['Sequence_length_template']], group_label, colors = ['#17202A'], show_hist = False)
+    lenfig.update_layout(
+        title="Basecalled reads length",
+        xaxis_title="Basedcall length",
+        yaxis_title="Read density",
+    )
+    
+    lenfig.add_vline(x=meanlength, line_width=2, line_dash="dash", line_color="Red", annotation_text="Mean", annotation_position="top right")
+    lenfig.add_vline(x=medianlength, line_width=2, line_dash="dash", line_color="Blue", annotation_text="Median", annotation_position="top left")
+    lenfig.update_xaxes(type='log')
+    #lenfig.show()
+
+        ## Write HTML
+    #html_template = '''<!doctype html>
+    #<html lang="en">
+    #<head>
+    #</head>
+    #<body>
+    #{results}
+    #</body>
+    #</html>
+    #'''
+
+    figTable_html = '<div><h2>Basecall summary</h2>'+figTable.to_html(full_html=False, include_plotlyjs='cdn')+'<p style="color:SlateGray;"><b>Note: </b>In computational biology, N50 is statistics of a set of contig or scaffold lengths. The N50 is similar to a mean or median of lengths, but has greater weight given to the longer contigs. It is used widely in genome assembly, especially in reference to contig lengths within a draft assembly.</p></div>'
+    lenfig_html = '<div><h2>Basecalled reads length</h2>'+ lenfig.to_html(full_html=False, include_plotlyjs='cdn')+'<p style="color:DodgerBlue;">Blue line: Median</p><p style="color:Tomato;">Red line: Mean</p><p><strong>Explanation: </strong>Basecalled reads length represents distribution plot (distplot) to show the relationship between read density on y-axis and basecall length as a logarithmic scale on x-axis for all barcodes in FASTQ file.</p><p style="color:SlateGray;"><b>Note: </b><br>- <ins>A distplot or distribution plot</ins> depicts the variation in the data distribution.<br>- <ins>A logarithmic scale (or log scale)</ins> is a way of displaying numerical data over a very wide range of values in a compact way.<br></p></div>'
+
+    results = figTable_html+lenfig_html
+    return results
+    #with open('HTMLtest.html','w') as outf:
+    #    outf.write(html_template.format(results=results))
+
 """""    
 def scSum(csv):
     print("This is score summary")
@@ -130,10 +123,14 @@ def scVsLen(csv):
     c=pd.read_csv(csv)
     #c1=barcode
     #c2=barcode
+    #dfs = dict(tuple(pd.DataFrame.groupby('Barcode_arrangement')))
+    #print (dfs['barcode01'])
     fig1 =px.density_heatmap(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
     fig2 =px.scatter(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'])
-    fig1.write_html("../density.html")
-    fig2.write_html("../scatter.html")
+    results = '<div><h2>Length VS Score summary</h2>'+fig1.to_html(full_html=False, include_plotlyjs='cdn')+fig2.to_html(full_html=False, include_plotlyjs='cdn')+'</div>'
+    #fig1.write_html("../density.html")
+    #fig2.write_html("../scatter.html")
+    return results
     #annotated
     # write-html.py
     # how to combine fig?
@@ -154,11 +151,34 @@ def scVsLen(csv):
     # the read len and quality of box with most count
     # percentage in the each box
 
-def csvToHtml(csv):
 
-    lenSum(csv) #birth
+def csvToHtml(csv):
     #scSum(csv) #pe
-    scVsLen(csv) #bam
+    
+
+    html_template = '''<!doctype html>
+    <html>
+        <head>
+        FASTQSUM
+    </head>
+
+    <div class='p1' style="border: 1px solid blue">
+
+    </div>
+    {birth}
+    <div id='p1' style="border: 1px solid blue">
+    #content2
+    </div>
+
+    <div id='p1' style="border: 1px solid blue">
+    {bam}
+    </div>
+
+    </html>
+    '''
+
+    with open('testbirth.html','w') as outf:
+        outf.write(html_template.format(birth=lenSum(csv),bam=scVsLen(csv) ))
 
 def fqToHtml(filePath) :
     csv=fqToCsv(filePath)  #csvlocation
