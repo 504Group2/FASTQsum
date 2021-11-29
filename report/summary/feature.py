@@ -85,7 +85,7 @@ def lenSum(csv): #birth
     #with open('HTMLtest.html','w') as outf:
     #    outf.write(html_template.format(results=results))
 
-"""""    
+  
 def scSum(csv):
     print("This is score summary")
     sum = pd.read_csv(csv)
@@ -93,7 +93,7 @@ def scSum(csv):
     #Summary table
     grouptable = sum.groupby('Barcode_arrangement')
     qsummarytable = grouptable['Mean_qscore_template'].describe()
-    print(qsummarytable)
+    qfigTable = ff.create_table(qsummarytable, index='Barcode_arrangement')
     
     #Basecalled reads PHRED quality
     qfig = ff.create_distplot([sum[sum['Barcode_arrangement']=='barcode02']['Mean_qscore_template'],
@@ -116,7 +116,15 @@ def scSum(csv):
                              insidetextorientation='radial', pull=[0, 0.2]
                             )])
     qPiefig.update_layout(title="Number of reads per quality score", legend_title="Type of reads")
-"""    
+
+    #HTML
+    qfigTable_html = '<div><h2>Summary of Quality Score</h2>'+qfigTable.to_html(full_html=False, include_plotlyjs='cdn')+'</div>'
+    qfig_html = qfig.to_html(full_html=False, include_plotlyjs='cdn')
+    qPiefig_html = qPiefig.to_html(full_html=False, include_plotlyjs='cdn')
+
+    results = qfigTable_html+qfig_html+qPiefig_html
+    return results
+   
 def scVsLen(csv):
     #Bam
     print("This is score vs summary summary")
