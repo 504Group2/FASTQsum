@@ -175,7 +175,7 @@ def csvToHtml(csv):
     </div>
     {birth}
     <div id='p1' style="border: 1px solid blue">
-    #content2
+    {pe}
     </div>
 
     <div id='p1' style="border: 1px solid blue">
@@ -186,7 +186,7 @@ def csvToHtml(csv):
     '''
 
     with open('testbirth.html','w') as outf:
-        outf.write(html_template.format(birth=lenSum(csv),bam=scVsLen(csv) ))
+        outf.write(html_template.format(birth=lenSum(csv),pe=scSum(csv),bam=scVsLen(csv)))
 
 def fqToHtml(filePath) :
     csv=fqToCsv(filePath)  #csvlocation
