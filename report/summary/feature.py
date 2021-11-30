@@ -116,7 +116,7 @@ def scSum(csv):
     #HTML
     qfigTable_html = '<div><h2>Quality score summary</h2>'+qfigTable.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>The quality score summary table shows the descriptive statistics information divided by each barcode arrangement.</p></div>'
     qfig_html = '<div><h2>Basecalled reads PHRED quality</h2>'+'<p style="text-align:center;"><img src="qHfig.png" width="1000" height="600"></p>'+'<p style="color:Tomato;">Red line: Cut-off line suggestion (Mean quality score at 8.0)</p><p><strong>Explanation: </strong>Basecalled reads PHRED quality plot represents the frequency distribution of mean quality score in each barcode arrangement.</p></div>'
-    qPiefig_html = '<div><h2>Number of reads per quality score</h2>'+qPiefig.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>Number of reads per quality score plot represents the proportion of the number of the passed and failed reads.</p></div>'
+    qPiefig_html = '<div><h2>Number of reads per quality score</h2>'+qPiefig.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>Number of reads per quality score plot represents the proportion between the number of the passed and failed reads.</p></div>'
 
     results = qfigTable_html+qfig_html+qPiefig_html
     return results
