@@ -169,18 +169,12 @@ def csvToHtml(csv):
         <head>
         FASTQSUM
     </head>
-
-    <div class='p1' style="border: 1px solid blue">
-
-    </div>
     {birth}
-    <div id='p1' style="border: 1px solid blue">
+    
     {pe}
-    </div>
-
-    <div id='p1' style="border: 1px solid blue">
+    
     {bam}
-    </div>
+    
 
     </html>
     '''

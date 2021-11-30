@@ -83,8 +83,8 @@ def dfToCsv(fastqdf):
     return csvLocation
 
 def fqToCsv(filePath):
-    bc01=getFq(filePath,100)
-    newcolList=colToList(bc01,100)
+    bc01=getFq(filePath,120000)
+    newcolList=colToList(bc01,120000)
     mydf=listToDf(newcolList)
     print(dfToCsv(mydf))
     return dfToCsv(mydf) #.csv location
