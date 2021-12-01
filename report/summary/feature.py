@@ -116,14 +116,14 @@ def scSum(csv):
     group_label = ['Mean_qscore_template']
     qDfig = ff.create_distplot([sum['Mean_qscore_template']], group_label, show_hist = False)
     qDfig.update_layout(xaxis_title="Reads quality scores", yaxis_title="Read density")
-    qDfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red", annotation_text="Cut-off line", annotation_font_color="red")
+    qDfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red")
     qDfig.write_image("qDfig.png")     
 
     #Basecalled reads PHRED quality (Histrogram plot)
     qHfig = px.histogram(sum, x=sum['Mean_qscore_template'], color=sum['Barcode_arrangement'], facet_col=sum['Barcode_arrangement'], marginal="rug")
     qHfig.update_xaxes(title='')
     qHfig.update_layout(xaxis2=dict(title="Reads quality scores"), yaxis_title="Read count", legend_title="Barcode")
-    qHfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red", annotation_text="Cut-off line", annotation_font_color="red")
+    qHfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red")
     qHfig.write_image("qHfig.png")
 
     #Number of reads per quality score
