@@ -158,13 +158,14 @@ def scVsLen(csv):
     
     c=pd.read_csv(csv)
     c['log_Sequence_length_template']=np.log10(c['Sequence_length_template'])
-    heatlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',nbinsx=5,nbinsy=10,labels=dict(x="Read length",y="Quality Score"),title='Density Heatmap Read Length vs PHRED Score')
+    heatlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',nbinsx=5,nbinsy=10,histnorm='percent',range_color=[0,100] ,title='Density Heatmap Read Length vs PHRED Score')
     heatlog.update_layout(
     xaxis_title="Basedcall length",
     xaxis2=dict(title="Basedcall length"),
     yaxis_title="Quality Score",
     legend_title="Barcode"
     )
+    
     
     scatterlog=px.scatter(data_frame=c,x=c.loc[:,'log_Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',opacity=0.2,title='Scatter plot Read Length vs Quality Score')
     scatterlog.update_layout(
@@ -177,14 +178,14 @@ def scVsLen(csv):
     scatterlog.write_image("scatterlog.png")
     heatdiv='''
                 <div>
-                    <p><strong>Explanation: </strong> The heatmaps share the same x-y axis with scatter plot. These colorful interactive plot illustrate how many reads are in each range of read length and quality score. Heatmap draws a grid that count reads in each partition. To inteprete, yellow color represent high frequency (many reads). In contrast, purple color means the lower count. 
-                    The read count of each shade is as displayed in the color bar.</p></div>
+                    <p><strong>Explanation: </strong> The heatmaps share the same x-y axis with scatter plot. These colorful interactive plot illustrate how many reads are in each range of read length and quality score. Heatmap draws a grid that count reads in each partition. To inteprete, yellow color represent high frequency (many reads). In contrast, purple color means the lower percentage. 
+                    The percentage of each shade is as displayed in the color bar.</p></div>
                 </div>'''
     scatterdiv='''
                 <div>
                 <p> This last section illustrates the relationship between read length and quality score. In other word, you could conveniently see how many good read there are at each length.</p>
                 <h2> Scatter plot </h2>
-                    <p style="text-align:center;"><img src="./images/scatterlog.png" /></p>
+                    <p style="text-align:center;"><img src="scatterlog.png" /></p>
                     <p><strong>Explanation: </strong>Each dot represents each read in the fastq. The X-axis is the log10-transformed read length, while the y-axis is the quality score. Reads with different barcode are plot separately. Scatter plot provide a simple explicit visualization of how length and quality distributed across dataset. Each dot is slightly opage. Thus you can observe where the dot overlap and condense.</p></div>
                 </div>'''
     results = '<div><h2>Read Length vs Quality Score Summary</h2>'+scatterdiv+'<h2> Heat Map </h2>'+heatlog.to_html(full_html=False, include_plotlyjs='cdn')+heatdiv+'</div>'
@@ -201,8 +202,8 @@ def csvToHtml(csv):
 
     html_template = '''<!doctype html>
     <html>
-        <head>
-        FASTQSUM
+    <head>
+    <p><img src="flogo.png" />SIRE504 Final Project</p>    
     </head>
 
     {birth}
@@ -215,7 +216,7 @@ def csvToHtml(csv):
     </html>
     '''
 
-    with open('testall.html','w') as outf:
+    with open('present.html','w') as outf:
         outf.write(html_template.format(birth=lenSum(csv),pe=scSum(csv),bam=scVsLen(csv)))
 
 def fqToHtml(filePath) :

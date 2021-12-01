@@ -19,8 +19,8 @@ def getFq(filePath) :
     #with gzip.open('../fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
         for idx, seq_record in enumerate(SeqIO.parse(f, "fastq")): # Read and parse 
             seqList.append(seq_record)
-            if idx == 1000: # set how many reads we want
-                break
+            #if idx == 1000: # set how many reads we want
+            #    break
     return seqList
 #2.seq_record object to lists             
 # Breakdown list seqList into lists of each column
@@ -64,9 +64,9 @@ def listToDf(mycolList):
     indexse = pd.Series(mycolList[0], name='index')
     readid = pd.Series(mycolList[1], name='Read_ID')
     
-    seqs = pd.Series(mycolList[3], name='Sequence_length_template')
-    quality = pd.Series(mycolList[4], name='Mean_qscore_template')
-    barcodes = pd.Series(mycolList[5], name='Barcode_arrangement')
+    seqs = pd.Series(mycolList[2], name='Sequence_length_template')
+    quality = pd.Series(mycolList[3], name='Mean_qscore_template')
+    barcodes = pd.Series(mycolList[4], name='Barcode_arrangement')
 
 #4.series to dataframe 
 
