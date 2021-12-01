@@ -55,7 +55,9 @@ def lenSum(csv): #birth
     figTable = go.Figure(data=[go.Table(header=dict(values=['Number of reads','Total bases','Mean read length','Median read length','Read length (N50)','Longest pass read'], fill_color= 'lavender'),
                 cells=dict(values=[numberreads, totalbase, meanlength, medianlength, N50size, maxread], fill_color= 'lightcyan'))], 
                 layout=go.Layout(title=go.layout.Title(text="Basecall summary")
+                , height=240
                 ))
+    
      
     #figTable.show()
     # figTable.write_image("figTable.png")
@@ -158,7 +160,7 @@ def scVsLen(csv):
     
     c=pd.read_csv(csv)
     c['log_Sequence_length_template']=np.log10(c['Sequence_length_template'])
-    heatlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',nbinsx=5,nbinsy=10,histnorm='percent',range_color=[0,100] ,title='Density Heatmap Read Length vs PHRED Score')
+    heatlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_col='Barcode_arrangement',nbinsx=5,nbinsy=10,histnorm='percent',range_color=[0,100] ,title='Density Heatmap Read Length vs PHRED Score')
     heatlog.update_layout(
     xaxis_title="Basedcall length",
     xaxis2=dict(title="Basedcall length"),
@@ -167,7 +169,7 @@ def scVsLen(csv):
     )
     
     
-    scatterlog=px.scatter(data_frame=c,x=c.loc[:,'log_Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',opacity=0.2,title='Scatter plot Read Length vs Quality Score')
+    scatterlog=px.scatter(data_frame=c,x=c.loc[:,'log_Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_col='Barcode_arrangement',opacity=0.2,title='Scatter plot Read Length vs Quality Score')
     scatterlog.update_layout(
     xaxis_title="Basedcall length",
     xaxis2=dict(title="Basedcall length"),
@@ -203,7 +205,7 @@ def csvToHtml(csv):
     html_template = '''<!doctype html>
     <html>
     <head>
-    <p><img src="flogo.png" />SIRE504 Final Project</p>    
+    <p><img src="flogo.png" width="200"/></p>    
     </head>
 
     {birth}
