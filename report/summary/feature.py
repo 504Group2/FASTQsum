@@ -17,7 +17,7 @@ from math import fabs, log
 from Bio import SeqIO
 
 def lenSum(csv): #birth
-    print("This is read length summary")
+    
     csvOut = pd.read_csv('../test.csv')
     templatelength = []
     templatelength = csvOut['Sequence_length_template']
@@ -44,12 +44,12 @@ def lenSum(csv): #birth
     lengthsort.sort()
     maxread = max(lengthsort)
      
-    print("Number of reads    : ", numberreads)
-    print("Total base        : ", totalbase)
-    print("Mean read length   : ", meanlength)
-    print("Median read length : ", medianlength)
-    print("Read length (N50)  : ", N50size)
-    print("Longest pass read  : ", maxread)
+    #print("Number of reads    : ", numberreads)
+    #print("Total base        : ", totalbase)
+    #print("Mean read length   : ", meanlength)
+    #print("Median read length : ", medianlength)
+    #print("Read length (N50)  : ", N50size)
+    #print("Longest pass read  : ", maxread)
      
     ## --------------------------------------------------------------------------------------
     figTable = go.Figure(data=[go.Table(header=dict(values=['Number of reads','Total bases','Mean read length','Median read length','Read length (N50)','Longest pass read'], fill_color= 'lavender'),
@@ -77,14 +77,19 @@ def lenSum(csv): #birth
      
     #lenfig.show()
     lenfig.write_image("lenfig.png")
-     
     ## Graph: Split barcode by facet
     ## --------------------------------------------------------------------------------------
     csvOut['log_Sequence_length_template']=np.log10(csvOut['Sequence_length_template'])
-    lenfigSplit = px.histogram(data_frame=csvOut, x=csvOut['log_Sequence_length_template'], facet_col='Barcode_arrangement', title="Basecalled reads length for each barcode", log_x=False)
-     
+    lenfigSplit = px.histogram(data_frame=csvOut, x=csvOut['log_Sequence_length_template'], facet_col='Barcode_arrangement', color='Barcode_arrangement', title="Basecalled reads length for each barcode", log_x=False)
+    lenfigSplit.update_layout(
+    xaxis_title="Basedcall length",
+    xaxis2=dict(title="Basedcall length"),
+    yaxis_title="Read count",
+    legend_title="Barcode"
+    )
     #lenfigSplit.show()
-    lenfigSplit.write_image("lenfigSplit.png")
+    lenfigSplit.write_image("lenfigSplit.png") 
+    
      
     ## Write HTML
     html_template = '''<!doctype html>
@@ -96,15 +101,17 @@ def lenSum(csv): #birth
     </body>
     </html>
     '''
+    
     figTable_html = '<div><h2>Basecall summary</h2>'+figTable.to_html(full_html=False, include_plotlyjs='cdn')+'<p style="color:SlateGray;"><b>Note: </b>In computational biology, N50 is statistics of a set of contig or scaffold lengths. The N50 is similar to a mean or median of lengths, but has greater weight given to the longer contigs. It is used widely in genome assembly, especially in reference to contig lengths within a draft assembly.</p></div>'
     lenfig_html = '<div><h2>Basecalled reads length</h2><h3 style="color:Navy;"><ins>Basecalled reads length for all barcodes</ins></h3>'+'<p style="text-align:center;"><img src="lenfig.png" width="1000" height="600"></p>'+'<p style="color:DodgerBlue;">Blue line: Median</p><p style="color:Tomato;">Red line: Mean</p><p><strong>Explanation: </strong>Basecalled reads length represents distribution plot (distplot) to show the relationship between read density on y-axis and basecall length as a logarithmic scale on x-axis for all barcodes in FASTQ file.</p><p style="color:SlateGray;"><b>Note: </b><br>- <ins>A distplot or distribution plot</ins> depicts the variation in the data distribution.<br>- <ins>A logarithmic scale (or log scale)</ins> is a way of displaying numerical data over a very wide range of values in a compact way.<br></p></div>'
     lenfigSplit_html = '<div><h3 style="color:Navy;"><ins>Basecalled reads length for each barcode</ins></h3>'+'<p style="text-align:center;"><img src="lenfigSplit.png" width="1000" height="600" class="center"></p>'+'<p><strong>Explanation: </strong>Basecalled reads length represents histogram plot (histplot) to show the relationship between count as number of reads on y-axis and basecall length as a logarithmic scale on x-axis for each barcode in FASTQ file.</p><p style="color:SlateGray;"><b>Note: </b><br>- <ins>A histplot or histogram plot</ins> is an excellent tool for visualizing and understanding the probabilistic distribution of numerical data or image data.<br>- <ins>A logarithmic scale (or log scale)</ins> is a way of displaying numerical data over a very wide range of values in a compact way.<br></p></div>'
      
     results = figTable_html+lenfig_html+lenfigSplit_html
+    print("Read Length Summary Complete")
     return results
     
 def scSum(csv):
-    print("This is score summary")
+    
     sum = pd.read_csv(csv)
     
     #Summary table
@@ -143,45 +150,49 @@ def scSum(csv):
     qPiefig_html = '<div><h2>Number of reads per quality score</h2>'+qPiefig.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>Number of reads per quality score plot represents the proportion between the number of the passed and failed reads.</p></div>'
 
     results = qfigTable_html+qfig_html+qPiefig_html
+    print("Quality Score Summary Complete")
     return results
    
 def scVsLen(csv):
     #Bam
-    print("This is score vs summary summary")
+    
     c=pd.read_csv(csv)
     c['log_Sequence_length_template']=np.log10(c['Sequence_length_template'])
-    figlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',nbinsx=5,nbinsy=10,title='Density Heatmap of logarithm-transformed read length compared with PHRED Score')
-    scatterlog=px.scatter(data_frame=c,x=c.loc[:,'log_Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_col='Barcode_arrangement',opacity=0.2)
-    #fig1 =px.density_heatmap(data_frame=c,x='Sequence_length_template', y='Mean_qscore_template',facet_row='Barcode_arrangement')
-    #fig2 =px.scatter(data_frame=c,x=c.loc[:,'Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_col='Barcode_arrangement')
-    figlog.write_image("images/figlog.png")
-    scatterlog.write_image("images/scatterlog.png")
-    #fig1.write_image("images/fig1.png")
-    #fig2.write_image("images/fig2.png")
-    #fig1html='fig1.to_html(full_html=False, include_plotlyjs='cdn')'
-    results = '<div><h2>Length VS Score summary</h2>'+'<img src="./images/scatterlog.png" />'+'<img src="./images/figlog.png" />'+'</div>'
-  
+    heatlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',nbinsx=5,nbinsy=10,labels=dict(x="Read length",y="Quality Score"),title='Density Heatmap Read Length vs PHRED Score')
+    heatlog.update_layout(
+    xaxis_title="Basedcall length",
+    xaxis2=dict(title="Basedcall length"),
+    yaxis_title="Quality Score",
+    legend_title="Barcode"
+    )
+    
+    scatterlog=px.scatter(data_frame=c,x=c.loc[:,'log_Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_row='Barcode_arrangement',opacity=0.2,title='Scatter plot Read Length vs Quality Score')
+    scatterlog.update_layout(
+    xaxis_title="Basedcall length",
+    xaxis2=dict(title="Basedcall length"),
+    yaxis_title="Quality Score",
+    legend_title="Barcode"
+    )
+   
+    scatterlog.write_image("scatterlog.png")
+    heatdiv='''
+                <div>
+                    <p><strong>Explanation: </strong> The heatmaps share the same x-y axis with scatter plot. These colorful interactive plot illustrate how many reads are in each range of read length and quality score. Heatmap draws a grid that count reads in each partition. To inteprete, yellow color represent high frequency (many reads). In contrast, purple color means the lower count. 
+                    The read count of each shade is as displayed in the color bar.</p></div>
+                </div>'''
+    scatterdiv='''
+                <div>
+                <p> This last section illustrates the relationship between read length and quality score. In other word, you could conveniently see how many good read there are at each length.</p>
+                <h2> Scatter plot </h2>
+                    <p style="text-align:center;"><img src="./images/scatterlog.png" /></p>
+                    <p><strong>Explanation: </strong>Each dot represents each read in the fastq. The X-axis is the log10-transformed read length, while the y-axis is the quality score. Reads with different barcode are plot separately. Scatter plot provide a simple explicit visualization of how length and quality distributed across dataset. Each dot is slightly opage. Thus you can observe where the dot overlap and condense.</p></div>
+                </div>'''
+    results = '<div><h2>Read Length vs Quality Score Summary</h2>'+scatterdiv+'<h2> Heat Map </h2>'+heatlog.to_html(full_html=False, include_plotlyjs='cdn')+heatdiv+'</div>'
+    print("Length vs Quality Complete")
+
     return results
     
-    #annotated
-    # write-html.py
-    # how to combine fig?
-    #f = open('../lenvsquality.html','w')
-
-    #message = """
-    #<html>
-    #    <head> FASTQsum : Read Length vs. Quality</head>
-    #    <body>
-    #        <p>This is the third sections</p>
-    #    </body>
-    #</html>"""
-
-    #f.write(message)
-    #f.close()
     
-    # Report summary should say 
-    # the read len and quality of box with most count
-    # percentage in the each box
 
 
 def csvToHtml(csv):
@@ -193,6 +204,7 @@ def csvToHtml(csv):
         <head>
         FASTQSUM
     </head>
+
     {birth}
     
     {pe}
@@ -203,7 +215,7 @@ def csvToHtml(csv):
     </html>
     '''
 
-    with open('test200000.html','w') as outf:
+    with open('testall.html','w') as outf:
         outf.write(html_template.format(birth=lenSum(csv),pe=scSum(csv),bam=scVsLen(csv)))
 
 def fqToHtml(filePath) :
