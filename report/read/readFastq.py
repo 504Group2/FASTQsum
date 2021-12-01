@@ -12,21 +12,21 @@ from Bio import SeqIO
 
 #1.Read fastq 
 # Extract,Read,Parse ont.exp2.fastq.gz into list bc01
-def getFq(filePath,n) :
+def getFq(filePath) :
     
     bc01=[]
     with gzip.open(filePath,'rt') as f:
     #with gzip.open('../fastq/ont.exp2.fastq.gz','rt') as f: # Decompress ont.exp2.fastq.gz 
         for idx, seq_record in enumerate(SeqIO.parse(f, "fastq")): # Read and parse 
             bc01.append(seq_record)
-            if idx == n: # set how many reads we want
+            if idx == 200000: # set how many reads we want
                 break
     return bc01
 #2.seq_record object to lists             
 # Breakdown list bc01 into lists of each column
 # List for column Read_id   
-def colToList(bc01,n): 
-    index=range(n+1)
+def colToList(bc01): 
+    index=range(len(bc01))
     idcodel=[]
     for i in bc01:
         idcodel.append(i.id)
@@ -75,7 +75,7 @@ def listToDf(mycolList):
 
 #5.convert dataframe to csv file
 def dfToCsv(fastqdf):
-    csvLocation='../test-1.csv'
+    csvLocation='../test.csv'
     fastqdf.to_csv(csvLocation, index=None) #Read_id
     #fastqdf.to_csv('/Users/naphat/Desktop/504/test-1.csv', index=None)
     pd.read_csv(csvLocation)
@@ -83,8 +83,8 @@ def dfToCsv(fastqdf):
     return csvLocation
 
 def fqToCsv(filePath):
-    bc01=getFq(filePath,120000)
-    newcolList=colToList(bc01,120000)
+    bc01=getFq(filePath)
+    newcolList=colToList(bc01)
     mydf=listToDf(newcolList)
     print(dfToCsv(mydf))
     return dfToCsv(mydf) #.csv location
