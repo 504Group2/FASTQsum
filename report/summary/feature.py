@@ -110,14 +110,19 @@ def scSum(csv):
     #Summary table
     grouptable = sum.groupby('Barcode_arrangement')
     qsummarytable = grouptable['Mean_qscore_template'].describe()
-    qfigTable = ff.create_table(qsummarytable, index='Barcode_arrangement')   
+    qfigTable = ff.create_table(qsummarytable, index='Barcode_arrangement')
+
+    #Basecalled reads PHRED quality (Distribution plot - All reads)
+    group_label = ['Mean_qscore_template']
+    qDfig = ff.create_distplot([sum['Mean_qscore_template']], group_label, show_hist = False)
+    qDfig.update_layout(xaxis_title="Reads quality scores", yaxis_title="Read density")
+    qDfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red", annotation_text="Cut-off line", annotation_font_color="red")
+    qDfig.write_image("qDfig.png")     
 
     #Basecalled reads PHRED quality (Histrogram plot)
-    qHfig = px.histogram(sum, x=sum['Mean_qscore_template'], color=sum['Barcode_arrangement'], marginal="rug")
+    qHfig = px.histogram(sum, x=sum['Mean_qscore_template'], color=sum['Barcode_arrangement'], facet_col=sum['Barcode_arrangement'], marginal="rug")
     qHfig.update_layout(xaxis_title="Reads quality scores", yaxis_title="Read count", legend_title="Barcode")
     qHfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red", annotation_text="Cut-off line", annotation_font_color="red")
-    qHfig.update_layout(barmode='overlay')
-    qHfig.update_traces(opacity=0.75)
     qHfig.write_image("qHfig.png")
 
     #Number of reads per quality score
@@ -131,8 +136,8 @@ def scSum(csv):
     qPiefig.update_layout(legend_title="Type of reads")
 
     #HTML
-    qfigTable_html = '<div><h2>Quality score summary</h2>'+qfigTable.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>The quality score summary table shows the descriptive statistics information divided by each barcode arrangement.</p></div>'
-    qfig_html = '<div><h2>Basecalled reads PHRED quality</h2>'+'<p style="text-align:center;"><img src="qHfig.png" width="1000" height="600"></p>'+'<p style="color:Tomato;">Red line: Cut-off line suggestion (Mean quality score at 8.0)</p><p><strong>Explanation: </strong>Basecalled reads PHRED quality plot represents the frequency distribution of mean quality score in each barcode arrangement.</p></div>'
+    qfigTable_html = '<div><h2>Quality score summary</h2>'+qfigTable.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>The quality score summary table shows the descriptive statistics information in each barcode arrangement.</p></div>'
+    qfig_html = '<div><h2>Basecalled reads PHRED quality</h2><p style="text-align:center;"><img src="qDfig.png" width="1000" height="600"></p><p style="color:Tomato;">Red line: Cut-off line suggestion (Mean quality score at 8.0)</p><p><strong>Explanation: </strong>Basecalled reads PHRED quality distplot represents the distribution of mean quality score for all reads.</p><p style="text-align:center;"><img src="qHfig.png" width="1000" height="600"></p><p style="color:Tomato;">Red line: Cut-off line suggestion (Mean quality score at 8.0)</p><p><strong>Explanation: </strong>Basecalled reads PHRED quality histplot represents the frequency distribution of mean quality score in each barcode arrangement.</p></div>'
     qPiefig_html = '<div><h2>Number of reads per quality score</h2>'+qPiefig.to_html(full_html=False, include_plotlyjs='cdn')+'<p><strong>Explanation: </strong>Number of reads per quality score plot represents the proportion between the number of the passed and failed reads.</p></div>'
 
     results = qfigTable_html+qfig_html+qPiefig_html
