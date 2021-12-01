@@ -121,7 +121,8 @@ def scSum(csv):
 
     #Basecalled reads PHRED quality (Histrogram plot)
     qHfig = px.histogram(sum, x=sum['Mean_qscore_template'], color=sum['Barcode_arrangement'], facet_col=sum['Barcode_arrangement'], marginal="rug")
-    qHfig.update_layout(xaxis_title="Reads quality scores", yaxis_title="Read count", legend_title="Barcode")
+    qHfig.update_xaxes(title='')
+    qHfig.update_layout(xaxis2=dict(title="Reads quality scores"), yaxis_title="Read count", legend_title="Barcode")
     qHfig.add_vline(x=8.0, line_width=1.5, line_dash="dash", line_color="red", annotation_text="Cut-off line", annotation_font_color="red")
     qHfig.write_image("qHfig.png")
 
