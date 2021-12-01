@@ -12,7 +12,7 @@ def argparserLocal():
     sum_command = subparsers.add_parser('sum',help='Generate html report')
     sum_command.add_argument("-r","--report",type=str,default=None,
                             help="generate complete html report")
-    sum_command.add_argument("-c","--save2csv",action='store_true',default=None,
+    sum_command.add_argument("-c","--save2csv",type=str,default=None,
                             help="generate only .csv summary")
   
     #print(parser.print_help())
@@ -20,12 +20,16 @@ def argparserLocal():
 def main():
     parser = argparserLocal()
     args=parser.parse_args()
-    filePath=args.report
-    if args.command == 'sum':
-        if args.save2csv :
-            fqToCsv(filePath)
-        else :
-            fqToHtml(filePath)
+    
+    if args.report:
+        
+        fqToHtml(args.report)
+    
+    elif args.save2csv:
+        
+        fqToCsv(args.save2csv)
+    
+            
             
             
 
