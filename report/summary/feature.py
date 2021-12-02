@@ -83,12 +83,18 @@ def lenSum(csv): #birth
     ## --------------------------------------------------------------------------------------
     csvOut['log_Sequence_length_template']=np.log10(csvOut['Sequence_length_template'])
     lenfigSplit = px.histogram(data_frame=csvOut, x=csvOut['log_Sequence_length_template'], facet_col='Barcode_arrangement', color='Barcode_arrangement', title="Basecalled reads length for each barcode", log_x=False)
+    '''
     lenfigSplit.update_layout(
     xaxis_title="Basedcall length",
     xaxis2=dict(title="Basedcall length"),
     yaxis_title="Read count",
     legend_title="Barcode"
     )
+    '''
+    lenfigSplit.update_xaxes(title='')
+    lenfigSplit.update_layout(xaxis2=dict(title="Reads Length"), yaxis_title="Read count", legend_title="Barcode")    
+    lenfigSplit.for_each_annotation(lambda a: a.update(text=a.text.replace("Barcode_arrangement=", "")))    
+  
     #lenfigSplit.show()
     lenfigSplit.write_image("lenfigSplit.png") 
     
@@ -161,22 +167,32 @@ def scVsLen(csv):
     c=pd.read_csv(csv)
     c['log_Sequence_length_template']=np.log10(c['Sequence_length_template'])
     heatlog=px.density_heatmap(data_frame=c,x=c.loc[:,'log_Sequence_length_template'],y=c.loc[:,'Mean_qscore_template'],facet_col='Barcode_arrangement',nbinsx=5,nbinsy=10,histnorm='percent',range_color=[0,100] ,title='Density Heatmap Read Length vs PHRED Score')
+    heatlog.update_xaxes(title='') 
+    heatlog.update_layout(xaxis2=dict(title="Reads Length"), yaxis_title="Quality Score", legend_title="Barcode")    
+    heatlog.for_each_annotation(lambda a: a.update(text=a.text.replace("Barcode_arrangement=", "")))  
+    '''
     heatlog.update_layout(
     xaxis_title="Basedcall length",
     xaxis2=dict(title="Basedcall length"),
     yaxis_title="Quality Score",
     legend_title="Barcode"
     )
+    '''
     
-    
+      
     scatterlog=px.scatter(data_frame=c,x=c.loc[:,'log_Sequence_length_template'], y=c.loc[:,'Mean_qscore_template'],facet_col='Barcode_arrangement',opacity=0.2,title='Scatter plot Read Length vs Quality Score')
+    scatterlog.update_xaxes(title='')  
+    scatterlog.update_layout(xaxis2=dict(title="Reads Length"), yaxis_title="Quality Score", legend_title="Barcode")    
+    scatterlog.for_each_annotation(lambda a: a.update(text=a.text.replace("Barcode_arrangement=", "")))    
+  
+    '''
     scatterlog.update_layout(
     xaxis_title="Basedcall length",
     xaxis2=dict(title="Basedcall length"),
     yaxis_title="Quality Score",
     legend_title="Barcode"
     )
-   
+    '''
     scatterlog.write_image("scatterlog.png")
     heatdiv='''
                 <div>
@@ -199,7 +215,6 @@ def scVsLen(csv):
 
 
 def csvToHtml(csv):
-    #scSum(csv) #pe
     
 
     html_template = '''<!doctype html>
@@ -218,7 +233,7 @@ def csvToHtml(csv):
     </html>
     '''
 
-    with open('present.html','w') as outf:
+    with open('report.html','w') as outf:
         outf.write(html_template.format(birth=lenSum(csv),pe=scSum(csv),bam=scVsLen(csv)))
 
 def fqToHtml(filePath) :
