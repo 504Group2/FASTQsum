@@ -92,7 +92,7 @@ def lenSum(csv): #birth
     )
     '''
     lenfigSplit.update_xaxes(title='')
-    lenfigSplit.update_layout(xaxis2=dict(title="Reads Length"), yaxis_title="Read count", legend_title="Barcode")    
+    lenfigSplit.update_layout(xaxis2=dict(title="log10 Basedcall length"), yaxis_title="Read count", legend_title="Barcode")    
     lenfigSplit.for_each_annotation(lambda a: a.update(text=a.text.replace("Barcode_arrangement=", "")))    
   
     #lenfigSplit.show()
